@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Scholarship Application | DigiVaiyaa Learnings</title>
+<style>
+:root{
+  --navy:#17365d;
+  --blue:#245a91;
+  --light:#f4f6f8;
+  --border:#cfd6dd;
+  --text:#252a2e;
+  --muted:#666;
+  --danger:#b42318;
+  --success:#176b3a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#eef1f4;
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+}
+.page{
+  width:min(1060px,calc(100% - 24px));
+  margin:24px auto 40px;
+  background:#fff;
+  border:1px solid #c9ced4;
+  box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+.topbar{
+  background:var(--navy);
+  color:#fff;
+  padding:18px 26px 16px;
+  border-bottom:4px solid #d7a928;
+}
+.topbar h1{margin:0;font-size:21px;font-weight:600}
+.topbar p{margin:5px 0 0;font-size:12px;opacity:.9}
+.notice{
+  margin:18px 24px 0;
+  padding:10px 13px;
+  border:1px solid #d7dee5;
+  background:#f8fafb;
+  line-height:1.5;
+}
+.notice strong{color:#17365d}
+form{padding:0 24px 28px}
+.section{
+  margin-top:22px;
+  border:1px solid var(--border);
+}
+.section-title{
+  background:#f1f3f5;
+  border-bottom:1px solid var(--border);
+  padding:10px 13px;
+  color:#17365d;
+  font-size:15px;
+  font-weight:700;
+}
+.section-body{
+  padding:16px 14px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px 24px;
+}
+.field label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:600;
+}
+.req{color:#b42318}
+input,select,textarea{
+  width:100%;
+  border:1px solid #aeb7c0;
+  border-radius:2px;
+  background:#fff;
+  padding:9px 10px;
+  font:inherit;
+  color:#222;
+  outline:none;
+}
+textarea{min-height:78px;resize:vertical}
+input:focus,select:focus,textarea:focus{
+  border-color:#4779aa;
+  box-shadow:0 0 0 2px rgba(36,90,145,.09);
+}
+.full{grid-column:1/-1}
+.radio-row,.check-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  align-items:center;
+}
+.radio-row label,.check-row label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:400;
+  margin:0;
+}
+.radio-row input,.check-row input{width:auto}
+.hint{
+  display:block;
+  margin-top:5px;
+  font-size:11px;
+  color:#6a6f73;
+}
+.error{
+  display:none;
+  margin-top:5px;
+  color:var(--danger);
+  font-size:12px;
+}
+.invalid input,.invalid select,.invalid textarea{
+  border-color:#c62828;
+  background:#fffafa;
+}
+.invalid .error{display:block}
+.upload-row{
+  display:grid;
+  grid-template-columns:1fr 180px;
+  gap:16px;
+  align-items:end;
+}
+.preview{
+  height:125px;
+  border:1px dashed #aeb7c0;
+  background:#fafafa;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  color:#777;
+  font-size:12px;
+}
+.preview img{max-width:100%;max-height:100%;object-fit:contain}
+.actions{
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid #d5d9dd;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+button{
+  border:1px solid #8d969f;
+  border-radius:3px;
+  padding:10px 20px;
+  font:600 14px Arial;
+  cursor:pointer;
+}
+.btn-reset{background:#fff;color:#333}
+.btn-submit{background:#245a91;border-color:#1d4b79;color:#fff}
+button:hover{filter:brightness(.96)}
+.modal-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.48);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal{
+  width:min(560px,100%);
+  background:#fff;
+  border-radius:3px;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+.modal-head{
+  padding:15px 18px;
+  background:#17365d;
+  color:#fff;
+  font-size:17px;
+  font-weight:600;
+}
+.modal-body{padding:20px;line-height:1.6}
+.modal-actions{
+  padding:0 20px 18px;
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+}
+.success-box{
+  border:1px solid #b8d9c5;
+  background:#f2faf5;
+  color:#176b3a;
+  padding:12px;
+  margin-top:12px;
+}
+.receipt{
+  display:none;
+  margin:18px 24px 30px;
+  border:1px solid #bfc6cc;
+  padding:22px;
+}
+.receipt h2{text-align:center;color:#17365d;margin:0 0 16px}
+.receipt table{width:100%;border-collapse:collapse}
+.receipt td{border:1px solid #d2d7db;padding:8px}
+.receipt td:first-child{width:35%;font-weight:600;background:#f5f6f7}
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .upload-row{grid-template-columns:1fr}
+  .page{width:100%;margin:0;border-left:0;border-right:0}
+  form{padding:0 12px 22px}
+  .notice{margin-left:12px;margin-right:12px}
+  .receipt{margin-left:12px;margin-right:12px}
+}
+@media print{
+  body{background:#fff}
+  .page{width:100%;margin:0;border:0;box-shadow:none}
+  .topbar,.notice,form{display:none}
+  .receipt{display:block!important;border:0;margin:0}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header class="topbar">
+    <h1>DigiVaiyaa Learnings</h1>
+    <p>Student Scholarship Assistance Programme — Practice Application</p>
+  </header>
+
+  <div class="notice">
+    <strong>Practice Form:</strong> This is a classroom exercise for learning online form filling.
+    Use only the information supplied by your teacher. This is not an official scholarship application.
+  </div>
+
+  <form id="applicationForm" novalidate>
+
+    <section class="section">
+      <div class="section-title">1. Student Information</div>
+      <div class="section-body">
+        <div class="grid">
+          <div class="field" id="f-name">
+            <label>Full Name <span class="req">*</span></label>
+            <input id="name" type="text" maxlength="60" autocomplete="off">
+            <span class="error">Enter the student's full name.</span>
+          </div>
+          <div class="field" id="f-dob">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input id="dob" type="date">
+            <span class="error">Enter a valid date of birth.</span>
+          </div>
+          <div class="field" id="f-gender">
+            <label>Gender <span class="req">*</span></label>
+            <select id="gender">
+              <option value="">-- Select --</option>
+              <option>Male</option><option>Female</option><option>Other</option>
+            </select>
+            <span class="error">Select gender.</span>
+          </div>
+          <div class="field" id="f-class">
+            <label>Class <span class="req">*</span></label>
+            <select id="class">
+              <option value="">-- Select --</option>
+              <option>IX</option><option>X</option>
+            </select>
+            <span class="error">Select class.</span>
+          </div>
+          <div class="field">
+            <label>Academic Year <span class="req">*</span></label>
+            <select id="year">
+              <option value="">-- Select --</option>
+              <option>2026-27</option><option>2027-28</option>
+            </select>
+            <span class="error">Select academic year.</span>
+          </div>
+          <div class="field">
+            <label>Student ID</label>
+            <input id="studentId" type="text" maxlength="20" autocomplete="off">
+            <span class="hint">Enter the ID given on the practice information sheet.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">2. Parent / Guardian Details</div>
+      <div class="section-body">
+        <div class="grid">
+          <div class="field">
+            <label>Father's Name <span class="req">*</span></label>
+            <input id="father" type="text" maxlength="60">
+            <span class="error">Enter father's name.</span>
+          </div>
+          <div class="field">
+            <label>Mother's Name <span class="req">*</span></label>
+            <input id="mother" type="text" maxlength="60">
+            <span class="error">Enter mother's name.</span>
+          </div>
+          <div class="field">
+            <label>Guardian's Name</label>
+            <input id="guardian" type="text" maxlength="60">
+          </div>
+          <div class="field" id="f-mobile">
+            <label>Mobile Number <span class="req">*</span></label>
+            <input id="mobile" type="tel" inputmode="numeric" maxlength="10">
+            <span class="error">Enter a valid 10-digit mobile number.</span>
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input id="email" type="email" maxlength="80">
+            <span class="error">Enter a valid email address.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">3. Address Details</div>
+      <div class="section-body">
+        <div class="grid">
+          <div class="field full">
+            <label>Address <span class="req">*</span></label>
+            <textarea id="address" maxlength="180"></textarea>
+            <span class="error">Enter the address.</span>
+          </div>
+          <div class="field">
+            <label>Village / Town <span class="req">*</span></label>
+            <input id="village" type="text" maxlength="50">
+            <span class="error">Enter village or town.</span>
+          </div>
+          <div class="field">
+            <label>Post Office <span class="req">*</span></label>
+            <input id="po" type="text" maxlength="50">
+            <span class="error">Enter post office.</span>
+          </div>
+          <div class="field">
+            <label>Police Station <span class="req">*</span></label>
+            <input id="ps" type="text" maxlength="50">
+            <span class="error">Enter police station.</span>
+          </div>
+          <div class="field">
+            <label>District <span class="req">*</span></label>
+            <select id="district">
+              <option value="">-- Select --</option>
+              <option>North 24 Parganas</option><option>South 24 Parganas</option>
+              <option>Kolkata</option><option>Howrah</option><option>Hooghly</option>
+              <option>Nadia</option><option>Murshidabad</option><option>Other</option>
+            </select>
+            <span class="error">Select district.</span>
+          </div>
+          <div class="field">
+            <label>State <span class="req">*</span></label>
+            <select id="state">
+              <option value="">-- Select --</option>
+              <option>West Bengal</option><option>Odisha</option><option>Bihar</option>
+              <option>Jharkhand</option><option>Other</option>
+            </select>
+            <span class="error">Select state.</span>
+          </div>
+          <div class="field" id="f-pin">
+            <label>PIN Code <span class="req">*</span></label>
+            <input id="pin" type="text" inputmode="numeric" maxlength="6">
+            <span class="error">Enter a valid 6-digit PIN code.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">4. Academic Details</div>
+      <div class="section-body">
+        <div class="grid">
+          <div class="field full">
+            <label>School Name <span class="req">*</span></label>
+            <input id="school" type="text" maxlength="100">
+            <span class="error">Enter school name.</span>
+          </div>
+          <div class="field">
+            <label>Board <span class="req">*</span></label>
+            <select id="board">
+              <option value="">-- Select --</option>
+              <option>WBBSE</option><option>CBSE</option><option>ICSE</option><option>Other</option>
+            </select>
+            <span class="error">Select board.</span>
+          </div>
+          <div class="field">
+            <label>Previous Examination <span class="req">*</span></label>
+            <select id="exam">
+              <option value="">-- Select --</option>
+              <option>Class VIII Final Examination</option>
+              <option>Class IX Final Examination</option>
+              <option>Other</option>
+            </select>
+            <span class="error">Select examination.</span>
+          </div>
+          <div class="field">
+            <label>Previous Roll Number <span class="req">*</span></label>
+            <input id="roll" type="text" maxlength="20">
+            <span class="error">Enter roll number.</span>
+          </div>
+          <div class="field" id="f-marks">
+            <label>Percentage of Marks <span class="req">*</span></label>
+            <input id="marks" type="number" min="0" max="100" step="0.01">
+            <span class="error">Enter marks between 0 and 100.</span>
+          </div>
+          <div class="field">
+            <label>Category <span class="req">*</span></label>
+            <select id="category">
+              <option value="">-- Select --</option>
+              <option>General</option><option>SC</option><option>ST</option><option>OBC</option><option>Other</option>
+            </select>
+            <span class="error">Select category.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">5. Bank Details</div>
+      <div class="section-body">
+        <div class="grid">
+          <div class="field">
+            <label>Account Holder Name <span class="req">*</span></label>
+            <input id="accountName" type="text" maxlength="60">
+            <span class="error">Enter account holder name.</span>
+          </div>
+          <div class="field">
+            <label>Bank Name <span class="req">*</span></label>
+            <input id="bank" type="text" maxlength="80">
+            <span class="error">Enter bank name.</span>
+          </div>
+          <div class="field" id="f-account">
+            <label>Account Number <span class="req">*</span></label>
+            <input id="account" type="text" inputmode="numeric" maxlength="18">
+            <span class="error">Enter an account number between 9 and 18 digits.</span>
+          </div>
+          <div class="field" id="f-ifsc">
+            <label>IFSC Code <span class="req">*</span></label>
+            <input id="ifsc" type="text" maxlength="11" style="text-transform:uppercase">
+            <span class="error">Enter a valid 11-character IFSC code.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">6. Document Upload</div>
+      <div class="section-body">
+        <div class="grid">
+          <div class="field">
+            <label>Student Photograph <span class="req">*</span></label>
+            <input id="photo" type="file" accept=".jpg,.jpeg,.png">
+            <span class="hint">JPG/PNG only. Maximum 2 MB.</span>
+            <span class="error">Please select a valid photograph.</span>
+          </div>
+          <div class="field">
+            <label>Signature <span class="req">*</span></label>
+            <input id="signature" type="file" accept=".jpg,.jpeg,.png">
+            <span class="hint">JPG/PNG only. Maximum 1 MB.</span>
+            <span class="error">Please select a valid signature.</span>
+          </div>
+          <div class="field">
+            <label>Marksheet</label>
+            <input id="marksheet" type="file" accept=".pdf,.jpg,.jpeg,.png">
+            <span class="hint">PDF/JPG/PNG. Maximum 3 MB.</span>
+          </div>
+          <div class="field">
+            <label>Certificate</label>
+            <input id="certificate" type="file" accept=".pdf,.jpg,.jpeg,.png">
+            <span class="hint">PDF/JPG/PNG. Maximum 3 MB.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">7. Declaration</div>
+      <div class="section-body">
+        <div class="check-row">
+          <label>
+            <input id="declaration" type="checkbox">
+            I declare that the information entered above is correct to the best of my knowledge.
+          </label>
+        </div>
+        <div id="declError" class="error" style="margin-top:10px">Please accept the declaration before submitting.</div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="button" class="btn-reset" id="resetBtn">Reset Form</button>
+      <button type="submit" class="btn-submit">Submit Application</button>
+    </div>
+  </form>
+
+  <div class="receipt" id="receipt">
+    <h2>Practice Application Receipt</h2>
+    <table>
+      <tr><td>Application Number</td><td id="r-app"></td></tr>
+      <tr><td>Student Name</td><td id="r-name"></td></tr>
+      <tr><td>Class</td><td id="r-class"></td></tr>
+      <tr><td>Academic Year</td><td id="r-year"></td></tr>
+      <tr><td>School</td><td id="r-school"></td></tr>
+      <tr><td>Submission Date</td><td id="r-date"></td></tr>
+    </table>
+    <div class="success-box">Practice application submitted successfully. No information has been sent to any external server.</div>
+    <div class="actions">
+      <button type="button" class="btn-submit" onclick="window.print()">Print Receipt</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="confirmModal">
+  <div class="modal">
+    <div class="modal-head">Review Before Submission</div>
+    <div class="modal-body">
+      Please check the information carefully before submitting the practice application.
+      <div class="success-box">This is a classroom simulation. The application will not be sent anywhere.</div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-reset" id="cancelSubmit">Go Back</button>
+      <button type="button" class="btn-submit" id="confirmSubmit">Confirm Submission</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function setInvalid(id, bad){
+  const el = $(id);
+  if(!el) return;
+  const field = el.closest('.field');
+  if(field) field.classList.toggle('invalid', bad);
+}
+
+function required(id){
+  const el = $(id);
+  const bad = !el.value.trim();
+  setInvalid(id,bad);
+  return !bad;
+}
+
+function selectRequired(id){
+  const el = $(id);
+  const bad = !el.value;
+  setInvalid(id,bad);
+  return !bad;
+}
+
+function validate(){
+  let ok = true;
+
+  ['name','father','mother','address','village','po','ps','school','roll','accountName','bank'].forEach(id=>{
+    if(!required(id)) ok=false;
+  });
+
+  ['gender','class','year','district','state','board','exam','category'].forEach(id=>{
+    if(!selectRequired(id)) ok=false;
+  });
+
+  const mobile = $('mobile').value.replace(/\D/g,'');
+  const mobileBad = !/^[6-9]\d{9}$/.test(mobile);
+  setInvalid('mobile',mobileBad); if(mobileBad) ok=false;
+
+  const pinBad = !/^\d{6}$/.test($('pin').value.trim());
+  setInvalid('pin',pinBad); if(pinBad) ok=false;
+
+  const marks = Number($('marks').value);
+  const marksBad = $('marks').value==='' || marks<0 || marks>100;
+  setInvalid('marks',marksBad); if(marksBad) ok=false;
+
+  const account = $('account').value.trim();
+  const accountBad = !/^\d{9,18}$/.test(account);
+  setInvalid('account',accountBad); if(accountBad) ok=false;
+
+  const ifsc = $('ifsc').value.trim().toUpperCase();
+  const ifscBad = !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc);
+  setInvalid('ifsc',ifscBad); if(ifscBad) ok=false;
+
+  const email = $('email').value.trim();
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    setInvalid('email',true); ok=false;
+  } else setInvalid('email',false);
+
+  const photoBad = !validFile('photo',2,['image/jpeg','image/png']);
+  const sigBad = !validFile('signature',1,['image/jpeg','image/png']);
+  setInvalid('photo',photoBad); if(photoBad) ok=false;
+  setInvalid('signature',sigBad); if(sigBad) ok=false;
+
+  const declBad = !$('declaration').checked;
+  $('declError').style.display = declBad ? 'block' : 'none';
+  if(declBad) ok=false;
+
+  return ok;
+}
+
+function validFile(id,maxMB,types){
+  const file = $(id).files[0];
+  if(!file) return false;
+  return types.includes(file.type) && file.size <= maxMB*1024*1024;
+}
+
+$('applicationForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  if(validate()) $('confirmModal').style.display='flex';
+  else{
+    const first = document.querySelector('.invalid');
+    if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+$('cancelSubmit').onclick=()=> $('confirmModal').style.display='none';
+
+$('confirmSubmit').onclick=()=>{
+  $('confirmModal').style.display='none';
+  $('applicationForm').style.display='none';
+
+  const now = new Date();
+  const app = 'DVL-' + now.getFullYear() + '-' + String(Math.floor(100000+Math.random()*900000));
+  $('r-app').textContent=app;
+  $('r-name').textContent=$('name').value.trim();
+  $('r-class').textContent=$('class').value;
+  $('r-year').textContent=$('year').value;
+  $('r-school').textContent=$('school').value.trim();
+  $('r-date').textContent=now.toLocaleDateString('en-IN');
+  $('receipt').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+$('resetBtn').onclick=()=>{
+  if(confirm('Clear all entered information?')) location.reload();
+};
+
+document.querySelectorAll('input,select,textarea').forEach(el=>{
+  el.addEventListener('input',()=> {
+    const field=el.closest('.field');
+    if(field) field.classList.remove('invalid');
+  });
+  el.addEventListener('change',()=> {
+    const field=el.closest('.field');
+    if(field) field.classList.remove('invalid');
+  });
+});
+
+$('ifsc').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
+$('mobile').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
+$('pin').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
+$('account').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
+</script>
+</body>
+</html>
